@@ -10,7 +10,6 @@ export class PaymentService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
-    private readonly paymentService: PaymentService,
     private readonly configService: ConfigService,
   ) {}
 

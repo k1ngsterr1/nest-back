@@ -8,15 +8,18 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  refCode   String
-  invitedBy String?
-  balance   Float    @default(0) // Add this field if missing
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int           @id @default(autoincrement())
+  username     String        @unique
+  email        String        @unique
+  password     String
+  refCode      String
+  invitedBy    String?
+  balance      Float         @default(0) // Add this field if missing
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // New relation field
+  serviceUsers ServiceUser[] // Defines the one-to-many relation to ServiceUser
 }
 
 model Payment {
@@ -27,4 +30,17 @@ model Payment {
   username    String
   payment_type String
   createdAt   DateTime @default(now())
+}
+
+model ServiceUser {
+  id                Int      @id @default(autoincrement())
+  userId            Int
+  user              User     @relation(fields: [userId], references: [id]) // Foreign key to User
+  providerId        Int
+  planId            String
+  traffic           Int
+  currentPeriodEnd  DateTime
+  serviceType       String
+  region            String?
+  ipNumber          String?
 }

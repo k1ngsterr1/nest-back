@@ -59,17 +59,14 @@ export class AuthService {
     // }
 
     const accessToken = this.jwtService.sign(
-      { userId: user.id, username: user.username },
-      {
-        secret: this.configService.get('JWT_ACCESS_SECRET'),
-        expiresIn: this.configService.get('JWT_ACCESS_EXPIRATION'),
-      },
+      { sub: user.id, username: user.username },
+      { secret: process.env.JWT_ACCESS_SECRET || '123', expiresIn: '1h' },
     );
 
     const refreshToken = this.jwtService.sign(
       { userId: user.id, username: user.username },
       {
-        secret: this.configService.get('JWT_REFRESH_SECRET'),
+        secret: process.env.JWT_REFRESH_SECRET,
         expiresIn: this.configService.get('JWT_REFRESH_EXPIRATION'),
       },
     );

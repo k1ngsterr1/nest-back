@@ -10,12 +10,12 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { PrismaService } from 'src/prisma.service';
 import { UpdateEmailDto } from 'src/user/dto/update-email-dto';
 import { UpdateUsernameDto } from 'src/user/dto/update-username-dto';
 import { UserService } from 'src/user/user.service';
+import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto/register.dto';
 
