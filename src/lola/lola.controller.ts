@@ -1,8 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
-  Param,
   Post,
   Req,
   UnauthorizedException,
@@ -11,40 +9,31 @@ import {
 import { AuthGuard } from 'src/auth/auth.guard';
 import { LolaService } from './lola.service';
 
-@Controller('lola')
+@Controller('v1/proxy')
 export class LolaController {
-  constructor(private lolaService: LolaService) {}
+  constructor(private readonly lolaService: LolaService) {}
 
   @UseGuards(AuthGuard)
-  @Post('buy')
-  async buyProxy(
+  @Post('/activate-proxy')
+  async activateProxy(
     @Req() req,
-    @Body('traffic') traffic: number,
-    @Body('serviceType') serviceType: string,
-  ): Promise<void> {
+    @Body('provider') provider: string, // Accept provider (e.g., 'lola')
+    @Body('service_type') serviceType: string, // Accept service type (e.g., 'residential')
+    @Body('region') region: { country: string; state: string; city: string }, // Optional region
+  ): Promise<any> {
     const userId = req.user?.id;
-    console.log(req.sub);
+
     if (!userId) {
       throw new UnauthorizedException();
     }
 
-    const response = await this.lolaService.buyProxy(
+    // Call the service method with the selected provider and service type
+    const response = await this.lolaService.activateProxy(
       userId,
-      traffic,
+      provider,
       serviceType,
     );
 
-    return response;
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('/get-bandwidth/:planId')
-  async readPlan(
-    @Param('planId') planId: string, // Extract planId from the request URL
-  ): Promise<any> {
-    const response = await this.lolaService.getBandwidthAsync(planId);
-
-    // Return the response to the client
     return response;
   }
 }
